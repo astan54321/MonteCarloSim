@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-public class Test {
+public class MonteCarlo {
 
     public static double getRan(int n) {
 
@@ -45,13 +45,6 @@ public class Test {
         Random r = new Random();
         int n = 1000;
         for (int i = 0; i < n; i++) {
-            // int calls = 0;
-            // double time = getTime(r.nextInt(10));
-            // if (time == 0) {
-            // double inverse = getX(getRan(i));
-            // time += inverse < 25 ? 6 + inverse : 32;
-            // }
-            // if ()
             int calls = 0;
             double time = 0;
             boolean answered = false;
@@ -90,11 +83,9 @@ public class Test {
 
         System.out.println("MAX = " + Collections.max(trials));
 
-        int sum = 0;
         double w1, w2, w3, w4, w5, w6, w7;
         w1 = w2 = w3 = w4 = w5 = w6 = w7 = 0;
         for (int i = 0; i < trials.size(); i++) {
-            sum += trials.get(i);
             if (trials.get(i) <= 15)
                 w1++;
             if (trials.get(i) <= 20)
@@ -109,7 +100,6 @@ public class Test {
                 w6++;
             if (trials.get(i) > 100)
                 w7++;
-            // System.out.println("P[W <= 15] = " + sum / );
         }
         System.out.println("P[W <= 15] = " + w1 / 1000);
         System.out.println("P[W <= 20] = " + w2 / 1000);
