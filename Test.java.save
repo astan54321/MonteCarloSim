@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-public class MonteCarlo {
+public class Test {
 
     public static double getRan(int n) {
 
@@ -11,11 +11,9 @@ public class MonteCarlo {
         double a = 24693;
         double c = 3967;
         double K = Math.pow(2, 15);
-        for (int i = 1; i < n; i++) {
-            double xnew = (a * x + c) % K;
-            x = xnew;
+        for (int i = 0; i < n; i++) {
+            x = (a * x + c) % K;
             u = x / K;
-            System.out.println("u" + i + " " + u);
         }
         return u;
     }
@@ -23,7 +21,7 @@ public class MonteCarlo {
     public static double getX(double u) {
         return -12 * Math.log(1 - u);
     }
-    
+
     public static double getTime(int r) {
         if (r >= 0 && r <= 1) {
             return 10;
@@ -47,21 +45,11 @@ public class MonteCarlo {
         Random r = new Random();
         int n = 1000;
         for (int i = 0; i < n; i++) {
-            int calls = 0;
-            double time = 0;
-            boolean answered = false;
-            do {
-                double currtime = getTime(r.nextInt(10));
-                if (currtime == 0) {
-                    double inverse = getX(getRan(i));
-                    answered = inverse < 25;
-                    time += inverse < 25 ? 6 + inverse : 32;
-                } else {
-                    answered = false;
-                }
-                time += currtime;
-                calls++;
-            } while (calls < 4 && !answered);
+            double time = getTime(r.nextInt(10));
+            if (time == 0) {
+                double inverse = getX(getRan(i));
+                time += inverse < 25 ? 6 + inverse : 32;
+            }
             trials.add(time);
         }
         Collections.sort(trials);
@@ -73,7 +61,7 @@ public class MonteCarlo {
         int size = trials.size();
         // Q1 MEDIAN
         double q1median = (trials.get(size / 4) + trials.get(size / 4 - 1)) / 2;
-        System.out.println("Q1 = " + q1median);
+        System.out.println("Quartile 1 = " + q1median);
 
         // MEDIAN
         double median = (trials.get(size / 2) + trials.get(size / 2 - 1)) / 2;
@@ -81,13 +69,13 @@ public class MonteCarlo {
 
         // Q3 MEDIAN
         double q3median = (trials.get(3 * size / 4) + trials.get(3 * size / 4 - 1)) / 2;
-        System.out.println("Q3 = " + q3median);
+        System.out.println("Quartile 3 = " + q3median);
 
-        System.out.println("MAX = " + Collections.max(trials));
-
+        int sum = 0;
         double w1, w2, w3, w4, w5, w6, w7;
         w1 = w2 = w3 = w4 = w5 = w6 = w7 = 0;
         for (int i = 0; i < trials.size(); i++) {
+            sum += trials.get(i);
             if (trials.get(i) <= 15)
                 w1++;
             if (trials.get(i) <= 20)
@@ -96,25 +84,20 @@ public class MonteCarlo {
                 w3++;
             if (trials.get(i) > 40)
                 w4++;
-            if (trials.get(i) > 50)
+            if (trials.get(i) > 25)
                 w5++;
-            if (trials.get(i) > 75)
+            if (trials.get(i) > 28)
                 w6++;
-            if (trials.get(i) > 100)
-                w7++;
+            if (trials.get(i) > 31)
+                w7++;            // System.out.println("P[W <= 15] = " + sum / );
         }
-        System.out.println("P[W <= 15] = " + w1 / 1000);
-        System.out.println("P[W <= 20] = " + w2 / 1000);
-        System.out.println("P[W <= 30] = " + w3 / 1000);
-        System.out.println("P[W > 40] = " + w4 / 1000);
-        System.out.println("P[W > 50] = " + w5 / 1000);
-        System.out.println("P[W > 75] = " + w6 / 1000);
-        System.out.println("P[W > 100] = " + w7 / 1000);
-
-        // System.out.println(trials);
-
-        System.out.println("U51: " + getRan(51));
-        System.out.println("U52: " + getRan(52));
-        System.out.println("U53: " + getRan(53));
+        System.out.println("P[W <= 15] = " + w1/1000);
+        System.out.println("P[W <= 20] = " + w2/1000);
+        System.out.println("P[W <= 30] = " + w3/1000);
+        System.out.println("P[W > 40] = " + w4/1000);
+        System.out.println("P[W > 25] = " + w5/1000);
+        System.out.println("P[W > 28] = " + w6/1000);
+        System.out.println("P[W > 31] = " + w7/1000);
+        System.out.println(Collections.max(trials));
     }
 }
